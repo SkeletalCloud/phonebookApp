@@ -31,9 +31,6 @@ app.use(cors())
     }
 ]
 
-app.get('/', (request, response)=>{
-  response.send('Welcome to our contact page')
-})
 
 app.get('/api/persons', (request, response)=>{
    response.json(persons)
