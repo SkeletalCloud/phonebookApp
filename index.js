@@ -64,7 +64,7 @@ app.post('/api/persons', (request, response)=>{
     const body = request.body
 
     if(!body.name || !body.number){
-      response.status(400).json({
+     return response.status(400).json({
         error : "Name or Number is missing!!!"
       })
     }
@@ -80,14 +80,14 @@ app.post('/api/persons', (request, response)=>{
    const checkdetail = persons.find(p => p.name === person.name)
 
    if(checkdetail){
-    response.status(400).json({
+    return response.status(400).json({
        error : 'The name already exists in the phonebook'
     }
     )
    }
    else {
    persons = persons.concat(person)
-   response.status(201).json(person)
+   return response.status(201).json(person)
    }
    
 })
