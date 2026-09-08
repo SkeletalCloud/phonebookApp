@@ -65,7 +65,7 @@ app.post('/api/persons', (request, response)=>{
 
     if(!body.name || !body.number){
       response.status(400).json({
-        "error" : "Name or Number is missing!!!"
+        error : "Name or Number is missing!!!"
       })
     }
 
@@ -81,7 +81,7 @@ app.post('/api/persons', (request, response)=>{
 
    if(checkdetail){
     response.status(400).json({
-       'error' : 'The name already exists in the phonebook'
+       error : 'The name already exists in the phonebook'
     }
     )
    }
@@ -95,11 +95,12 @@ app.post('/api/persons', (request, response)=>{
 app.delete('/api/persons/:id', (request, response)=>{
    const id = request.params.id
    persons = persons.filter(person => person.id !== id)
-  //  response.status(204).end()
-  response.send(persons)
+    response.status(204).end()
 })
 
-const PORT = 3001
-app.listen(PORT, ()=>{
-  console.log(`Server running on port ${PORT}`)
-})
+// const PORT = 3001
+// app.listen(PORT, ()=>{
+//   console.log(`Server running on port ${PORT}`)
+// })
+
+module.exports = app
