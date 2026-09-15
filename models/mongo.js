@@ -17,6 +17,12 @@ const url = `mongodb+srv://begood1345_db_user:${password}@cluster0.idxtj6w.mongo
 mongoose.set('strictQuery',false)
 
 mongoose.connect(url, { family: 4 })
+  .then(() => {
+    console.log('Connected to MongoDB')
+  })
+  .catch(error => {
+    console.error('MongoDB connection error:', error.message)
+  })
 
 const personSchema = new mongoose.Schema({
   // name: String,
@@ -24,11 +30,11 @@ const personSchema = new mongoose.Schema({
   name: {
     type: String,
     minLength: 5,
-    require :true
+    required :true
   },
   number : {
     type: String,
-    require: true,
+    required: true,
     minlength: 8,
     validate: {
       validator: function(value) {

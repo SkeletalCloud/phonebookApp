@@ -1,4 +1,8 @@
 
+
+const dns = require('dns');
+dns.setServers(['8.8.8.8', '8.8.4.4']);
+
 const express = require('express')
 const app = express()
 const path = require('path')
@@ -51,7 +55,7 @@ app.get('/info', (request, response) => {
 
   Person.countDocuments({})
     .then((count) => {
-      response.send( `<p>Phonebook has info for ${count.length} people</p>
+      response.send( `<p>Phonebook has info for ${count} people</p>
     <p>${date}</p>
     `)
     })
@@ -83,7 +87,7 @@ app.get('/api/persons/:id', (request, response,next) => {
 //   return String(maxId + 1)
 // }
 
-app.post('/api/persons', (request, response, next) => {
+app.post('/api/persons', async (request, response, next) => {
   //   const body = request.body
 
   //   if(!body.name || !body.number){
@@ -111,21 +115,33 @@ app.post('/api/persons', (request, response, next) => {
   //  return response.status(201).json(person)
   //  }
 
-  const { name, number } = request.body
-
-  if (!name.content || !number.content) {
-    return response.status(400).json({ error: 'content missing' })
+  const {name, number} = request.body
+  if (!name || !number) {
+    return response.status(400).json({
+      error: 'name or number missing'
+    })
   }
-
   const person = new Person({
-    name : name,
-    number: number
+    // name : body.content,
+    // number: body.content
+    name,
+    number,
   })
 
-  person.save().then(savedPerson => response.json(savedPerson))
-    .catch(err => next(err))
+  // person.save().then(savedPerson =>{
+  //    response.json(savedPerson)
+  // return response.status(201).send('Phonebook successfully created')
+  //     mongoose.connection.close()
+  //  })
+  //   .catch(err => next(err))
 
-  return response.status(201).send('Phonebook successfully created')
+
+   try {
+    const savedPerson = await person.save()
+    response.status(201).json(savedPerson)
+  } catch (error) {
+    next(error)
+  }
 
 })
 
